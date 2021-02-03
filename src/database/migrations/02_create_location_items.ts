@@ -3,11 +3,11 @@ import Knex from 'knex'; // importando o tipo. Para importar o tipo come�
 export async function up(knex: Knex) {
     return knex.schema.createTable('location_items', table => {
         table.increments('id').primary();
-        table.string('location_id')
+        table.integer('location_id')
             .notNullable()
             .references('id')
             .inTable('locations');
-        table.string('item_id')
+        table.integer('item_id')
             .notNullable()
             .references('id')
             .inTable('items');
