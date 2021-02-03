@@ -4,7 +4,8 @@
   "description": "Repositório criado para estudo back-end com Node js e TypeScript",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts"
+    "dev": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts",
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
   },
   "repository": {
     "type": "git",
