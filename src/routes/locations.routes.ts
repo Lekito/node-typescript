@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { response, Router } from 'express';
 import knex from '../database/connection';
 
 const locationsRouter = Router();
@@ -39,7 +39,7 @@ locationsRouter.post('/', async(request, response) => {
         if(!selectedItem) {
             return response.status(400).json({message: 'Item not found.'})
         }
-        
+
         return {
             item_id,
             location_id
@@ -54,6 +54,18 @@ locationsRouter.post('/', async(request, response) => {
         id: location_id,
         ...location // spread operator representado com os "...", ele tras todo o conteúdo do objeto LOCATION. 
     });
+});
+
+locationsRouter.get('/:id', async (request, response) => {
+    const { id } = request.params;
+
+    const location = await knex('locations').where('id', id).first();
+
+    if(!location){
+        return response.status(400).json({message: 'Location not found.'});
+    }
+
+    return response.json(location);
 });
 
 export default locationsRouter;
