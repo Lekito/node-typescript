@@ -61,11 +61,16 @@ locationsRouter.get('/:id', async (request, response) => {
 
     const location = await knex('locations').where('id', id).first();
 
-    if(!location){
+    if(!location) {
         return response.status(400).json({message: 'Location not found.'});
     }
 
-    return response.json(location);
+    const items = await knex('items')
+        .join('location_items', 'items.id', '=' , 'location_items.item_id')
+        .where('location_items.location_id', id)
+        .select('items.title')
+
+    return response.json({location, items});
 });
 
 export default locationsRouter;
