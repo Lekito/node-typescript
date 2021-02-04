@@ -25,22 +25,33 @@ locationsRouter.post('/', async(request, response) => {
         city,
         uf
     };
+
+    const transaction = await knex.transaction(); // transformando os dois comandos insert num único processo.
+
     
-    const newIds = await knex('locations').insert(location);
+    const newIds = await transaction('locations').insert(location); // primeiro insert
 
-    const locationId = newIds[0];
+    const location_id = newIds[0];
 
-    const locationItems = items.map((item_id: number) => {
+    const locationItems = items.map(async (item_id: number) => { // map serve para percorrer um Array
+        const selectedItem = await transaction('items').where('id', item_id).first();// first serve para selecionar um registro. 
+
+        if(!selectedItem) {
+            return response.status(400).json({message: 'Item not found.'})
+        }
+        
         return {
             item_id,
-            location_id: locationId
+            location_id
         }
     });
 
-    await knex('location_items').insert(locationItems);
+    await transaction('location_items').insert(locationItems); // segundo insert
+
+    await transaction.commit(); // fim. transformando os dois comandos insert num único processo.
 
     return response.json({
-        id: locationId,
+        id: location_id,
         ...location // spread operator representado com os "...", ele tras todo o conteúdo do objeto LOCATION. 
     });
 });
