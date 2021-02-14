@@ -1,8 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import routes from './routes';
 import path from 'path'; 
 
 const app = express();
+
+app.use(cors()); // permita que qualquer domínio acesse essa api. ideal para ambiente de desenvolvimento. 
+
+// app.use(cors({
+//    origin: ['dominio.com.br', 'alexdeveloper.com.br'] // permite só esses dois domínios acessarem a api. Ideal para ambiente de produção.
+// }));
 
 app.use(express.json());
 
