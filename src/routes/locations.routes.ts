@@ -77,8 +77,9 @@ locationsRouter.post('/', async (request, response) => {
 
     const location_id = newIds[0];
 
-    const locationItems = items.map(async (item_id: number) => { // map serve para percorrer um Array
-        const selectedItem = await transaction('items').where('id', item_id).first();// first serve para selecionar um registro. 
+    const locationItems = items
+    .map((item_id: number) => { // map serve para percorrer um Array
+        const selectedItem = transaction('items').where('id', item_id).first();// first serve para selecionar um registro. 
 
         if(!selectedItem) {
             return response.status(400).json({message: 'Item not found.'})
